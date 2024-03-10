@@ -14,24 +14,23 @@ function filter_href_html {
 }
 
 # Create temporary folder and navigate into it
-mkdir $TEMP_FOLDER_NAME && cd $TEMP_FOLDER_NAME
+mkdir "$TEMP_FOLDER_NAME" && cd "$TEMP_FOLDER_NAME" || exit 1
 
 # Download the HTML file from the target URL
-wget $TARGET_URL
+wget "$TARGET_URL"
 
 # Extract URLs, perform DNS lookup, and save results to an array
-data=$(cat $DEFAULT_INDEX_FILE | filter_href_html | sort | uniq)
+data=$(cat "$DEFAULT_INDEX_FILE" | filter_href_html | sort -u)
 data_array=()
 
-while IFS=$'\n' read -r line; do
-    line=("[$(dig +short $line)]: $line")
-    data_array+=$line
-    echo $line
+while IFS= read -r line; do
+    line="[ $(dig +short "$line") ]: $line"
+    data_array+=("$line")
+    echo "$line"
 done <<< "$data"
 
 # Save the array of results to the output file
-echo ${data_array[@]} > $DEFAULT_OUTPUT_FILE
+printf '%s\n' "${data_array[@]}" > "$DEFAULT_OUTPUT_FILE"
 
 # Navigate back to the parent directory and remove the temporary folder
-cd ..
-rm -r $TEMP_FOLDER_NAME
+cd .. && rm -r "$TEMP_FOLDER_NAME"
