@@ -12,7 +12,6 @@ data=$(cat $DEFAULT_INDEX_FILE | grep "<body" -A 99999 | grep "href" | cut -d "=
 data_array=()
 
 while IFS=$'\n' read -r line; do
-  # Adicione cada linha do conteúdo ao array
   line=("[$(dig +short $line)]: $line")
   data_array+=$line
   echo $line
