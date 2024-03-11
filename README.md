@@ -1,4 +1,4 @@
-# Parsing Script Documentation
+# HTML HREF Looktup Documentation
 This script is written in Bash and is used to parse an HTML file, extract URLs from the href attributes in the body section, perform a DNS lookup on each URL, and save the results to an output file.
 
 ## Usage
